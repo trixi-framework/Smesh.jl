@@ -24,6 +24,8 @@ end
 const libsmesh = @load_preference("libsmesh")
 
 
+"""
+"""
 function build_delaunay_triangulation(data_points; shuffle = false, verbose = false)
     # Pre-allocate output array
     npoints = size(data_points, 2)
@@ -43,13 +45,5 @@ function build_delaunay_triangulation(data_points; shuffle = false, verbose = fa
 
     return ve_out
 end
-
-
-"""
-    greet()
-
-Say hello to the world.
-"""
-greet() = print("Hello World!")
 
 end # module Smesh
