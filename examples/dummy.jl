@@ -1,0 +1,3 @@
+using Smesh
+
+Smesh.greet()
