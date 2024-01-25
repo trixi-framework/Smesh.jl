@@ -106,7 +106,8 @@ jobs:
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           cat LocalPreferences.toml
-          ls -la $(pwd)/smesh/install/lib/libsmesh.*
+          ls -la $(pwd)/smesh/install/lib/
+          ls -la $(pwd)/smesh/install/bin/
         shell: 'msys2 {0}'
       # END - Build smesh locally - remove once JLL package is available
       - uses: julia-actions/setup-julia@v1
