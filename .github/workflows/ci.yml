@@ -40,15 +40,38 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.8'
-          - '1.9'
+          # - '1.8'
+          # - '1.9'
           - '1.10'
         os:
           - ubuntu-latest
-          - macOS-latest
-          - windows-latest
+          # - macOS-latest
+          # - windows-latest
     steps:
       - uses: actions/checkout@v4
+      # BEGIN - Build smesh locally - remove once JLL package is available
+      - name: Get smesh
+        uses: actions/checkout@v4
+        with:
+          repository: trixi-framework/smesh
+          path: smesh
+      - name: Build smesh
+        run: |
+          mkdir smesh/build && cd smesh/build
+          cmake .. -DCMAKE_INSTALL_PREFIX=../install
+          cmake --build .
+          cmake --install .
+      - name: Use smesh
+        run: |
+          cat << EOF > LocalPreferences.toml
+          [Smesh]
+          libsmesh = "$(pwd)/smesh/install/lib/libsmesh.so"
+          EOF
+      - name: Verify
+        run: |
+          cat LocalPreferences.toml
+          ls -la $(pwd)/smesh/install/lib/libsmesh.so
+      # END - Build smesh locally - remove once JLL package is available
       - uses: julia-actions/setup-julia@v1
         with:
           version: ${{ matrix.version }}
