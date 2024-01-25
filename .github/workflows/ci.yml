@@ -94,7 +94,7 @@ jobs:
           cd ../..
           cat << EOF > LocalPreferences.toml
           [Smesh]
-          libsmesh = "D:\a\Smesh.jl\Smesh.jl\smesh\install\bin\libsmesh.dll"
+          libsmesh = "D:\\a\\Smesh.jl\\Smesh.jl\\smesh\\install\\bin\\libsmesh.dll"
           EOF
         shell: 'msys2 {0}'
       # END - Build smesh locally - remove once JLL package is available
