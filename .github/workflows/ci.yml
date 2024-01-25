@@ -94,20 +94,8 @@ jobs:
           cd ../..
           cat << EOF > LocalPreferences.toml
           [Smesh]
-          libsmesh = "$(pwd)/smesh/install/bin/libsmesh.dll"
+          libsmesh = "D:\a\Smesh.jl\Smesh.jl\smesh\install\bin\libsmesh.dll"
           EOF
-        shell: 'msys2 {0}'
-      - name: Verify
-        if: ${{ matrix.os != 'windows-latest' }}
-        run: |
-          cat LocalPreferences.toml
-          ls -la $(pwd)/smesh/install/lib/libsmesh.*
-      - name: Verify
-        if: ${{ matrix.os == 'windows-latest' }}
-        run: |
-          cat LocalPreferences.toml
-          ls -la $(pwd)/smesh/install/lib/
-          ls -la $(pwd)/smesh/install/bin/
         shell: 'msys2 {0}'
       # END - Build smesh locally - remove once JLL package is available
       - uses: julia-actions/setup-julia@v1
