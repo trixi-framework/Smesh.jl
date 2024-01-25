@@ -1,3 +1,0 @@
-using Smesh
-
-Smesh.greet()
