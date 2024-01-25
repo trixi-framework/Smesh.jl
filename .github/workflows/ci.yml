@@ -40,37 +40,71 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          # - '1.8'
-          # - '1.9'
+          - '1.8'
+          - '1.9'
           - '1.10'
         os:
           - ubuntu-latest
-          # - macOS-latest
-          # - windows-latest
+          - macOS-latest
+          - windows-latest
     steps:
       - uses: actions/checkout@v4
       # BEGIN - Build smesh locally - remove once JLL package is available
+      - uses: msys2/setup-msys2@v2
+        if: ${{ matrix.os == 'windows-latest' }}
+        with:
+          update: true
+          install: git base-devel mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake
       - name: Get smesh
         uses: actions/checkout@v4
         with:
           repository: trixi-framework/smesh
           path: smesh
-      - name: Build smesh
+      - name: Build smesh (Linux)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: |
           mkdir smesh/build && cd smesh/build
           cmake .. -DCMAKE_INSTALL_PREFIX=../install
           cmake --build .
           cmake --install .
-      - name: Use smesh
-        run: |
           cat << EOF > LocalPreferences.toml
           [Smesh]
           libsmesh = "$(pwd)/smesh/install/lib/libsmesh.so"
           EOF
+      - name: Build smesh (macOS)
+        if: ${{ matrix.os == 'macos-latest' }}
+        run: |
+          mkdir smesh/build && cd smesh/build
+          FC=gfortran-13 cmake .. -DCMAKE_INSTALL_PREFIX=../install
+          cmake --build .
+          cmake --install .
+          cat << EOF > LocalPreferences.toml
+          [Smesh]
+          libsmesh = "$(pwd)/smesh/install/lib/libsmesh.dylib"
+          EOF
+      - name: Build smesh
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          mkdir smesh/build && cd smesh/build
+          FC=gfortran cmake .. -DCMAKE_INSTALL_PREFIX=../install
+          cmake --build .
+          cmake --install .
+          cat << EOF > LocalPreferences.toml
+          [Smesh]
+          libsmesh = "$(pwd)/smesh/install/lib/libsmesh.dll"
+          EOF
+        shell: 'msys2 {0}'
       - name: Verify
+        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           cat LocalPreferences.toml
           ls -la $(pwd)/smesh/install/lib/libsmesh.so
+      - name: Verify
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: |
+          cat LocalPreferences.toml
+          ls -la $(pwd)/smesh/install/lib/libsmesh.so
+        shell: 'msys2 {0}'
       # END - Build smesh locally - remove once JLL package is available
       - uses: julia-actions/setup-julia@v1
         with:
