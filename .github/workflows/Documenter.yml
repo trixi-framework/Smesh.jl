@@ -39,7 +39,7 @@ jobs:
           cmake .. -DCMAKE_INSTALL_PREFIX=../install
           cmake --build .
           cmake --install .
-          cd ../..
+          cd ../../docs
           cat << EOF > LocalPreferences.toml
           [Smesh]
           libsmesh = "$(pwd)/smesh/install/lib/libsmesh.so"
