@@ -94,7 +94,7 @@ jobs:
           cd ../..
           cat << EOF > LocalPreferences.toml
           [Smesh]
-          libsmesh = "$(pwd)/smesh/install/lib/libsmesh.dll"
+          libsmesh = "$(pwd)/smesh/install/bin/libsmesh.dll"
           EOF
         shell: 'msys2 {0}'
       - name: Verify
