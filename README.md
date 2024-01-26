@@ -19,6 +19,8 @@ operating system](https://julialang.org/downloads/platform/).
 [Smesh.jl](https://github.com/trixi-framewor/Smesh.jl) works with Julia v1.8
 and later on Linux, macOS and Windows platforms.
 
+*Note: On pre-Apple Silicon systems with macOS, Julia v1.10 or later is required.*
+
 ### Installation
 Since Smesh.jl is a not registered Julia package yet, you can install it by executing
 the following commands in the Julia REPL:
