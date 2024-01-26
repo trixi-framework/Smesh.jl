@@ -13,7 +13,7 @@ To create a new release for Smesh.jl, perform the following steps:
    * If the new release contains *breaking changes* (i.e., user code might not work as
      before without modifications), increase the *minor* version by one and set the
      *patch* version to zero. In our example, the new version should thus be `v0.3.0`.
-   * If the new release only contains minor modfications and/or bug fixes, the *minor*
+   * If the new release only contains minor modifications and/or bug fixes, the *minor*
      version is kept as-is and the *patch* version is increased by one. In our example, the
      new version should thus be `v0.2.4`.
 4) Edit the `version` string in the
