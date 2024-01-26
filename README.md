@@ -19,11 +19,6 @@ operating system](https://julialang.org/downloads/platform/).
 [Smesh.jl](https://github.com/trixi-framewor/Smesh.jl) works with Julia v1.8
 and later on Linux, macOS and Windows platforms.
 
-To use Smesh.jl, you currently need to manually install the underlying Fortran package smesh
-(note that this is subject to change in the near future). For installation instructions,
-please follow the README in the [smesh](https://github.com/trixi-framework/smesh)
-repository.
-
 ### Installation
 Since Smesh.jl is a not registered Julia package yet, you can install it by executing
 the following commands in the Julia REPL:
@@ -31,9 +26,10 @@ the following commands in the Julia REPL:
 julia> import Pkg; Pkg.add("https://github.com/trixi-framework/Smesh.jl")
 ```
 
-To make use of the local smesh build, you need to tell Smesh.jl where to find the library.
-For this, create a `LocalPreferences.toml` file next to your `Project.toml` for the project
-in which you use Smesh.jl. It should have the following content:
+By default, Smesh.jll uses pre-compiled binaries of the smesh package that will get
+automatically installed when obtaining Smesh.jl. However, you can also make use of a local
+smesh build.  For this, create a `LocalPreferences.toml` file next to your `Project.toml`
+for the project in which you use Smesh.jl. It should have the following content:
 
 * On Linux:
   ```toml
