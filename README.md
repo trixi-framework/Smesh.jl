@@ -12,6 +12,68 @@ a simple Fortran package for generating and handling unstructured triangular and
 meshes.
 
 
+## Getting started
+### Prerequisites
+If you have not yet installed Julia, please [follow the instructions for your
+operating system](https://julialang.org/downloads/platform/).
+[Smesh.jl](https://github.com/trixi-framewor/Smesh.jl) works with Julia v1.8
+and later on Linux, macOS and Windows platforms.
+
+To use Smesh.jl, you currently need to manually install the underlying Fortran package smesh
+(note that this is subject to change in the near future). For installation instructions,
+please follow the README in the [smesh](https://github.com/trixi-framework/smesh)
+repository.
+
+### Installation
+Since Smesh.jl is a not registered Julia package yet, you can install it by executing
+the following commands in the Julia REPL:
+```julia
+julia> import Pkg; Pkg.add("https://github.com/trixi-framework/Smesh.jl")
+```
+
+To make use of the local smesh build, you need to tell Smesh.jl where to find the library.
+For this, create a `LocalPreferences.toml` file next to your `Project.toml` for the project
+in which you use Smesh.jl. It should have the following content:
+
+* On Linux:
+  ```toml
+  [Smesh]
+  libsmesh = "<smesh-install-prefix>/lib/libsmesh.so"
+  ```
+* On macOS:
+  ```toml
+  [Smesh]
+  libsmesh = "<smesh-install-prefix>/lib/libsmesh.dylib"
+  ```
+* On Windows:
+  ```toml
+  [Smesh]
+  libsmesh = "<smesh-install-prefix>/bin/libsmesh.dll"
+  ```
+
+Where `<smesh-install-prefix>` is where you have installed the local smesh build.
+
+### Usage
+The easiest way to get started is to run one of the examples from the
+[`examples`](https://github.com/trixi-framework/Smesh.jl/tree/main/examples) directory by
+`include`ing them in Julia, e.g.,
+```
+julia> using Smesh
+
+julia> include(joinpath(pkgdir(Smesh), "examples", "build_delaunay_triangulation.jl"))
+Computing Delaunay triangulation.
+Triangulation elements:          2
+Total flipped edges:             0
+Average search time:          1.25
+Flips/triangle:               0.00
+Flips/node:                   0.00
+3×2 Matrix{Int64}:
+ 3  1
+ 1  3
+ 2  4
+ ```
+
+
 ## Authors
 Smesh.jl was initiated by
 [Simone Chiocchetti](https://www.mi.uni-koeln.de/NumSim/dr-simone-chiocchetti/)
