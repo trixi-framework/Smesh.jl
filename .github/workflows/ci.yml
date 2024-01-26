@@ -47,6 +47,11 @@ jobs:
           - ubuntu-latest
           - macOS-latest
           - windows-latest
+        exclude:
+          - os: macOS-latest
+            version: 1.8
+          - os: macOS-latest
+            version: 1.9
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v1
@@ -69,7 +74,6 @@ jobs:
           path-to-lcov: ./lcov.info
       # Enable tmate debugging of manually-triggered workflows if the input option was provided
       - name: Setup tmate session for debugging
-        # if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled && always() }}
-        if: ${{ matrix.os == 'macOS-latest' && always() }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled && always() }}
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 15
