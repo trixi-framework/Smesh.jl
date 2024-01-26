@@ -1,27 +1,11 @@
 module Smesh
 
 using Preferences: @load_preference, @has_preference 
+using smesh_jll: smesh_jll
 
 export build_delaunay_triangulation
 
-if !@has_preference("libsmesh")
-    error("""
-          Missing preference `libsmesh` for package Smesh.jl. Please add a
-          `LocalPreferences.toml` file to your current Julia project with the following
-          content, where `path/to/libsmesh.{ext}` is the path to your local build of
-          libsmesh and `{ext}` is the appropriate extension for shared libraries on your
-          system (e.g., `so` on Linux, `dylib` on macOS, `dll` on Windows). Afterwards,
-          you need to restart Julia.
-
-          Content of `LocalPreferences.toml` (between the '```' marks):
-
-          ```
-          [Smesh]
-          libsmesh = "path/to/libsmesh.{ext}"
-          ```
-          """)
-end
-const libsmesh = @load_preference("libsmesh")
+const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
 
 
 """
