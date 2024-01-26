@@ -10,3 +10,5 @@ data_points = collect([0.0 0.0
 
 # Create triangulation
 ve = build_delaunay_triangulation(data_points; verbose = true)
+
+ne = delaunay_compute_neighbors(data_points, ve)
