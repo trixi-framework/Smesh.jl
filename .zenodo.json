@@ -1,0 +1,24 @@
+{
+    "title": "Smesh.jl",
+    "description": "A Julia wrapper for the Fortran package smesh to generate and handle unstructured meshes ",
+    "license": "MIT",
+    "upload_type": "software",
+    "creators": [
+        {
+            "affiliation": "University of Cologne, Germany",
+            "name": "Chiocchetti, Simone",
+            "orcid": "0000-0001-7394-5708"
+        },
+        {
+            "affiliation": "University of Cologne, Germany",
+            "name": "Bolm, Benjamin",
+            "orcid": "0009-0009-6055-8472"
+        },
+        {
+            "affiliation": "Applied and Computational Mathematics, RWTH Aachen University, Germany",
+            "name": "Schlottke-Lakemper, Michael",
+            "orcid": "0000-0002-3195-2536"
+        }
+    ],
+    "access_right": "open"
+}
