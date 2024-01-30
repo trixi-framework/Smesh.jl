@@ -1,6 +1,6 @@
 {
     "title": "Smesh.jl",
-    "description": "A Julia wrapper for the Fortran package smesh to generate and handle unstructured meshes ",
+    "description": "A Julia wrapper for the Fortran package smesh to generate and handle unstructured meshes",
     "license": "MIT",
     "upload_type": "software",
     "creators": [
