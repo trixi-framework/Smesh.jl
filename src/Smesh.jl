@@ -4,6 +4,7 @@ using Preferences: @load_preference
 using smesh_jll: smesh_jll
 
 export build_delaunay_triangulation, delaunay_compute_neighbors, build_polygon_mesh, voronoi_compute_neighbors
+export mesh_basic
 
 const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
 
@@ -112,4 +113,6 @@ function voronoi_compute_neighbors(vertices, voronoi_vertices, voronoi_vertices_
 
     return voronoi_neighbors
 end
+
+include("standard_meshes.jl")
 end # module Smesh

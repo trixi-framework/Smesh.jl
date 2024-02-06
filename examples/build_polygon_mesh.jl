@@ -1,16 +1,11 @@
 using Smesh
 
 # Create data points
-corners = collect([0.0 0.0
-                   1.0 0.0
-                   1.0 1.0
-                   0.0 1.0]')
-# inner points (randomly generated)
-# n_points = 10
-# data_points = rand(Float64, 2, n_points)
-data_points = [0.110127  0.995047  0.636537  0.942174   0.22912   0.162025  0.616885  0.376891  0.475242  0.448486;
-               0.554234  0.431985  0.540326  0.0252587  0.702442  0.379256  0.80191   0.237447  0.745391  0.868326]
-data_points = hcat(data_points, corners)
+coordinates_min = [0.0, 0.0]
+coordinates_max = [1.0, 1.0]
+n_points_x = 4
+n_points_y = 5
+data_points = mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_y)
 
 # Create triangulation
 vertices = build_delaunay_triangulation(data_points; verbose = false)
