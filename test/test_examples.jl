@@ -9,6 +9,10 @@ using Smesh
     @test_nowarn include("../examples/build_delaunay_triangulation.jl")
 end
 
+@testset verbose=true showtiming=true "examples/build_polygon_mesh.jl" begin
+    @test_nowarn include("../examples/build_polygon_mesh.jl")
+end
+
 end # @testset "test_examples.jl"
 
 end # module
