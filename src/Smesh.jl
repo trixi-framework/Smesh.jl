@@ -24,7 +24,6 @@ function build_delaunay_triangulation(data_points; shuffle = false, verbose = fa
                                                                 verbose::Cint)::Cint
 
     # Resize array to appropriate size
-    # TODO: Converting to Julia `Int`s for convenience.
     ve_out = ve_out[:, 1:ntriangles]
 
     return ve_out
