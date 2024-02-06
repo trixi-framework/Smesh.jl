@@ -6,6 +6,7 @@
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/Smesh.jl/badge.svg)](https://coveralls.io/github/trixi-framework/Smesh.jl)
 [![Codecov](https://codecov.io/gh/trixi-framework/Smesh.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/trixi-framework/Smesh.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/license/mit/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10581816.svg)](https://doi.org/10.5281/zenodo.10581816)
 
 Smesh.jl is a Julia wrapper packagae for [smesh](https://github.com/trixi-framework/smesh),
 a simple Fortran package for generating and handling unstructured triangular and polygonal
@@ -22,13 +23,13 @@ and later on Linux, macOS and Windows platforms.
 *Note: On pre-Apple Silicon systems with macOS, Julia v1.10 or later is required.*
 
 ### Installation
-Since Smesh.jl is a not registered Julia package yet, you can install it by executing
-the following commands in the Julia REPL:
+Since Smesh.jl is a registered Julia package, you can install it by executing
+the following command in the Julia REPL:
 ```julia
-julia> import Pkg; Pkg.add("https://github.com/trixi-framework/Smesh.jl")
+julia> import Pkg; Pkg.add("Smesh")
 ```
 
-By default, Smesh.jll uses pre-compiled binaries of the smesh package that will get
+By default, Smesh.jl uses pre-compiled binaries of the smesh package that will get
 automatically installed when obtaining Smesh.jl. However, you can also make use of a local
 smesh build.  For this, create a `LocalPreferences.toml` file next to your `Project.toml`
 for the project in which you use Smesh.jl. It should have the following content:
@@ -70,6 +71,21 @@ Flips/node:                   0.00
  1  3
  2  4
  ```
+
+
+## Referencing
+If you use Smesh.jl in your own research, please cite this repository as follows:
+```bibtex
+@misc{chiocchetti2024smesh_jl,
+  title={Smesh.jl: {A} {J}ulia wrapper for the Fortran package smesh to generate and handle unstructured meshes},
+  author={Chiocchetti, Simone and Bolm, Benjamin and Schlottke-Lakemper, Michael},
+  year={2024},
+  howpublished={\url{https://github.com/trixi-framework/Smesh.jl}},
+  doi={10.5281/zenodo.10581816}
+}
+```
+Please also consider citing the upstream package
+[smesh](https://github.com/trixi-framework/smesh) (`doi:10.5281/zenodo.10579422`) itself.
 
 
 ## Authors

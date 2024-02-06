@@ -1,7 +1,7 @@
 name = "Smesh"
 uuid = "e2b06280-edec-413c-a3a2-1b4e389db7bf"
 authors = ["Simone Chiocchetti <simone.chiocchetti@uni-koeln.de>", "Benjamin Bolm <benjamin.bolm@uni-koeln.de>", "Michael Schlottke-Lakemper <michael@sloede.com>"]
-version = "0.1.0"
+version = "0.1.2-dev"
 
 [deps]
 Preferences = "21216c6a-2e73-6563-6e65-726566657250"
