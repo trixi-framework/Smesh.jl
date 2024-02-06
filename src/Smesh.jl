@@ -93,8 +93,9 @@ function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:stan
     return voronoi_vertices_coordinates, voronoi_vertices, voronoi_vertices_interval
 end
 
+"""
+"""
 function voronoi_compute_neighbors(vertices, voronoi_vertices, voronoi_vertices_interval, delaunay_neighbors)
-
     n_vertices_voronoi = length(voronoi_vertices)
     n_elements_voronoi = size(voronoi_vertices_interval, 2)
     n_element_delaunay = size(delaunay_neighbors, 2)
