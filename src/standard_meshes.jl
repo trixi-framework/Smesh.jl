@@ -1,9 +1,18 @@
-function mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_y)
-    dx = (coordinates_max[1] - coordinates_min[1]) / n_points_x
-    dy = (coordinates_max[2] - coordinates_min[2]) / n_points_y
+"""
+    mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_y)
 
-    points = Matrix{eltype(coordinates_min)}(undef, 2, n_points_x * n_points_y  +
-                                                       div(n_points_y - n_points_y % 2, 2))
+Create points in a regular grid.
+"""
+function mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_y)
+    dx = (coordinates_max[1] - coordinates_min[1]) / (n_points_x - 1)
+    dy = (coordinates_max[2] - coordinates_min[2]) / (n_points_y - 1)
+
+    # Number of points:
+    # Tensorproduct: n_points_x * n_points_y
+    # Add for half the rows (rounded off) one point each
+    n_points = n_points_x * n_points_y + div(n_points_y - n_points_y % 2, 2)
+    points = Matrix{eltype(coordinates_min)}(undef, 2, n_points)
+
     count = 1
     for j in 1:n_points_y
         for i in 1:n_points_x
