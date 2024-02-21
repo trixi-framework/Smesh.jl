@@ -75,7 +75,7 @@ function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:stan
 
     npt_voronoi, nve_voronoi, nelem_voronoi = array_sizes
 
-    voronoi_vertices_coordinates = Matrix{Cdouble}(undef, 2, nve_voronoi)
+    voronoi_vertices_coordinates = Matrix{Cdouble}(undef, 2, npt_voronoi)
     voronoi_vertices = Array{Cint}(undef, nve_voronoi)
     voronoi_vertices_interval = Matrix{Cint}(undef, 2, nelem_voronoi)
 
