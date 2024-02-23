@@ -11,6 +11,9 @@ export mesh_basic
 const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
 
 """
+    build_delaunay_triangulation(data_points; shuffle = false, verbose = false)
+
+
 """
 function build_delaunay_triangulation(data_points; shuffle = false, verbose = false)
     # Pre-allocate output array
@@ -33,8 +36,19 @@ function build_delaunay_triangulation(data_points; shuffle = false, verbose = fa
 end
 
 """
+    delaunay_compute_neighbors(data_points, vertices; periodicity = (false, false))
+
+Calculates the neighbor connectivity for a delaunay triangulation created with
+`build_delaunay_triangulation`.
+- `data_points` is an array of size 2 × (number of points) with `[coordinate, point]`.
+- The 3 × (number of triangles) sized array `vertices` describes the triangulation
+with the structure `[point_index, triangle_index]`
+- The `periodicity` indicates whether the mesh is periodic in x or y direction.
+
+Note: The feature of periodic meshes is experimental. Right now, it only supports straight
+boundaries which are parallel to the specific axis.
 """
-function delaunay_compute_neighbors(data_points, vertices, periodicity)
+function delaunay_compute_neighbors(data_points, vertices; periodicity = (false, false))
     n_nodes = size(data_points, 2)
     n_elements = size(vertices, 2)
     neighbors = Matrix{Cint}(undef, 3, n_elements)
@@ -185,8 +199,25 @@ function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:stan
 end
 
 """
+    voronoi_compute_periodic_neighbors!(vertices, voronoi_vertices_coordinates, voronoi_vertices,
+                                        voronoi_vertices_interval, delaunay_neighbors;
+                                        periodicity = (false, false))
+
+Calculates the neighbor connectivity for a polygon mesh created with `build_polygon_mesh`.
+- `vertices` defines the structure of the triangulation. An array of size 3 × (number of triangles) with `[point_index, triangle_index]`.
+- `voronoi_vertices_coordinates` contains the coordinates of voronoi vertices in `voronoi_vertices`.
+- `voronoi_vertices`: All points within the polygon mesh are sorted counterclockwise for each element.
+- `voronoi_vertices_interval` is an array of size 2 × (number of elements) and contains the
+- `delaunay_neighbors` is the connectivity data structure created by `delaunay_compute_neighbors`.
+ starting and ending point index for every element in `voronoi_vertices`.
+- The `periodicity` indicates whether the mesh is periodic in x or y direction.
+
+Note: The feature of periodic meshes is experimental. Right now, it only supports straight
+boundaries which are parallel to the specific axis.
 """
-function voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates, voronoi_vertices, voronoi_vertices_interval, delaunay_neighbors, periodicity)
+function voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates, voronoi_vertices,
+                                   voronoi_vertices_interval, delaunay_neighbors;
+                                   periodicity = (false, false))
     n_vertices_voronoi = length(voronoi_vertices)
     n_elements_voronoi = size(voronoi_vertices_interval, 2)
     n_element_delaunay = size(delaunay_neighbors, 2)
