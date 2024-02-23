@@ -12,7 +12,7 @@ vertices = build_delaunay_triangulation(data_points; verbose = false)
 
 neighbors = delaunay_compute_neighbors(data_points, vertices)
 
-# 3 options for the mesh type
+# different options for the mesh type
 # :standard_voronoi => standard Voronoi, but use centroid if the circumcenter lies outside the triangle
 # :centroids        => not an actual Voronoi, always use centroids and not circumcenters as vertices for the mesh
 # :incenters        => not an actual Voronoi, always use incenters and not circumcenters as vertices for the mesh

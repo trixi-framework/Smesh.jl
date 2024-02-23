@@ -5,7 +5,8 @@ using smesh_jll: smesh_jll
 
 using LinearAlgebra: normalize
 
-export build_delaunay_triangulation, delaunay_compute_neighbors, build_polygon_mesh, voronoi_compute_neighbors
+export build_delaunay_triangulation, delaunay_compute_neighbors
+export build_polygon_mesh, voronoi_compute_neighbors
 export mesh_basic
 
 const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
@@ -41,9 +42,9 @@ end
 Calculates the neighbor connectivity for a delaunay triangulation created with
 `build_delaunay_triangulation`.
 - `data_points` is an array of size 2 × (number of points) with `[coordinate, point]`.
-- The 3 × (number of triangles) sized array `vertices` describes the triangulation
-with the structure `[point_index, triangle_index]`
-- The `periodicity` indicates whether the mesh is periodic in x or y direction.
+- `vertices` of size 3 × (number of triangles) describes the triangulation with the
+structure `[point_index, triangle_index]`
+- `periodicity` indicates whether the mesh is periodic in x or y direction.
 
 Note: The feature of periodic meshes is experimental. Right now, it only supports straight
 boundaries which are parallel to the specific axis.
@@ -153,8 +154,7 @@ There are three different mesh types:
 - `:standard_voronoi` => standard voronoi, but use centroid if the circumcenter lies outside the triangle
 - `:centroids` => not an actual voronoi, always use centroids and not circumcenters as vertices for the mesh
 - `:incenters` => not an actual voronoi, always use incenters and not circumcenters as vertices for the mesh
-- `:pure_voronoi` => pur Voronoi mesh (just for experiments, should not be used for computation)
-
+- `:pure_voronoi` => pure Voronoi mesh (just for experiments, should not be used for computation)
 """
 function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:standard_voronoi, orthogonal_boundary_edges=true)
     mesh_type_dict = Dict(:pure_voronoi => Cint(-1), :standard_voronoi => Cint(0), :centroids => Cint(1), :incenters => Cint(2))
@@ -205,12 +205,12 @@ end
 
 Calculates the neighbor connectivity for a polygon mesh created with `build_polygon_mesh`.
 - `vertices` defines the structure of the triangulation. An array of size 3 × (number of triangles) with `[point_index, triangle_index]`.
-- `voronoi_vertices_coordinates` contains the coordinates of voronoi vertices in `voronoi_vertices`.
+- `voronoi_vertices_coordinates` contains the coordinates of Voronoi vertices in `voronoi_vertices`.
 - `voronoi_vertices`: All points within the polygon mesh are sorted counterclockwise for each element.
 - `voronoi_vertices_interval` is an array of size 2 × (number of elements) and contains the
+  starting and ending point index for every element in `voronoi_vertices`.
 - `delaunay_neighbors` is the connectivity data structure created by `delaunay_compute_neighbors`.
- starting and ending point index for every element in `voronoi_vertices`.
-- The `periodicity` indicates whether the mesh is periodic in x or y direction.
+- `periodicity` indicates whether the mesh is periodic in x or y direction.
 
 Note: The feature of periodic meshes is experimental. Right now, it only supports straight
 boundaries which are parallel to the specific axis.
@@ -233,14 +233,22 @@ function voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates, voron
                                                 n_elements_voronoi::Cint)::Cvoid
 
     # Periodic neighbors
-    voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity, voronoi_vertices_coordinates, voronoi_vertices, voronoi_vertices_interval)
+    voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
+                                        voronoi_vertices_coordinates, voronoi_vertices,
+                                        voronoi_vertices_interval)
 
     return voronoi_neighbors
 end
 
 """
+    voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
+                                        voronoi_vertices_coordinates, voronoi_vertices,
+                                        voronoi_vertices_interval)
+
 """
-function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity, voronoi_vertices_coordinates, voronoi_vertices, voronoi_vertices_interval)
+function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
+                                             voronoi_vertices_coordinates, voronoi_vertices,
+                                             voronoi_vertices_interval)
     # Add neighboring elements if there are periodic boundaries
     if !any(periodicity)
         return nothing
@@ -290,8 +298,10 @@ function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity, vor
             # Note: In voronoi_vertices the points are ordered counterclockwise:
             # To get the lowest point on the left/bottom, we use the end point of the face.
             # To get the lowest point on the right/top, we use the start point of the face.
-            coord_elements_left = [voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_left[i] + 1]] for i in eachindex(boundary_elements_left)]
-            coord_elements_right = [voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_right[i]]] for i in eachindex(boundary_elements_right)]
+            coord_elements_left = [voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_left[i] + 1]]
+                                                                for i in eachindex(boundary_elements_left)]
+            coord_elements_right = [voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_right[i]]]
+                                                                 for i in eachindex(boundary_elements_right)]
             # Get sorting permutation
             p_left = sortperm(coord_elements_left)
             p_right = sortperm(coord_elements_right)
