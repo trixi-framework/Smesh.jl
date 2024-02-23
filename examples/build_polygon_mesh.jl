@@ -17,7 +17,7 @@ neighbors = delaunay_compute_neighbors(data_points, vertices)
 # :centroids        => not an actual Voronoi, always use centroids and not circumcenters as vertices for the mesh
 # :incenters        => not an actual Voronoi, always use incenters and not circumcenters as vertices for the mesh
 # :pure_voronoi     => pure Voronoi mesh (just for experiments, should not be used for computation)
-mesh_type = :standard_voronoi
+mesh_type = :centroids
 voronoi_vertices_coordinates, voronoi_vertices,
     voronoi_vertices_interval = build_polygon_mesh(data_points, vertices, mesh_type=mesh_type)
 
