@@ -4,6 +4,9 @@
 Create points in a regular grid.
 """
 function mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_y)
+    @assert n_points_x > 1 "n_points_x has to be at least 2."
+    @assert n_points_y > 1 "n_points_y has to be at least 2."
+
     dx = (coordinates_max[1] - coordinates_min[1]) / (n_points_x - 1)
     dy = (coordinates_max[2] - coordinates_min[2]) / (n_points_y - 1)
 
