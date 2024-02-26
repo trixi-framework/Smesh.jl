@@ -102,6 +102,7 @@ function delaunay_compute_periodic_neighbors!(neighbors, periodicity, data_point
             end
             # Check whether there are the same number of elements on both sides
             @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries!"
+            @assert length(boundary_elements_left) != 0 "No detected boundary edge in $dim-th direction!"
             # Get coordinates for sorting
             # Note: In vertices the points are ordered counterclockwise:
             # To get the lowest point on the left/bottom, we use the point with index `face_index + 2`.
@@ -293,6 +294,7 @@ function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
             end
             # Check whether there are the same number of elements on both sides
             @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries!"
+            @assert length(boundary_elements_left) != 0 "No detected boundary edge in $dim-th direction!"
             # Get coordinates for sorting
             # Note: In voronoi_vertices the points are ordered counterclockwise:
             # To get the lowest point on the left/bottom, we use the end point of the face.
