@@ -149,7 +149,7 @@ function delaunay_compute_periodic_neighbors!(neighbors, periodicity, data_point
 end
 
 """
-    build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:standard_voronoi, orthogonal_boundary_edges=true)
+    build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:centroids, orthogonal_boundary_edges=true)
 
 There are three different mesh types:
 - `:standard_voronoi` => standard voronoi, but use centroid if the circumcenter lies outside the triangle
@@ -157,7 +157,7 @@ There are three different mesh types:
 - `:incenters` => not an actual voronoi, always use incenters and not circumcenters as vertices for the mesh
 - `:pure_voronoi` => pure Voronoi mesh (just for experiments, should not be used for computation)
 """
-function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:standard_voronoi, orthogonal_boundary_edges=true)
+function build_polygon_mesh(data_points, triangulation_vertices; mesh_type=:centroids, orthogonal_boundary_edges=true)
     mesh_type_dict = Dict(:pure_voronoi => Cint(-1), :standard_voronoi => Cint(0), :centroids => Cint(1), :incenters => Cint(2))
 
     array_sizes = Vector{Cint}(undef, 3) # npt_voronoi, nve_voronoi, nelem_voronoi==nnode
