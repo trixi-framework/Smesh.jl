@@ -22,6 +22,9 @@ end
     vertices = Cint[3 1; 1 3; 2 4]
 
     @test delaunay_compute_neighbors(data_points, vertices) == [0 0; 0 0; 2 1]
+    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, false)) == [0 0; 2 1; 2 1]
+    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (false, true)) == [2 1; 0 0; 2 1]
+    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, true)) == [2 1; 2 1; 2 1]
 end
 
 @testset verbose=true showtiming=true "build_polygon_mesh" begin
