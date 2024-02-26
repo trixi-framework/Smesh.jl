@@ -21,10 +21,14 @@ end
                            0.0 1.0]')
     vertices = Cint[3 1; 1 3; 2 4]
 
-    @test delaunay_compute_neighbors(data_points, vertices) == [0 0; 0 0; 2 1]
-    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, false)) == [0 0; 2 1; 2 1]
-    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (false, true)) == [2 1; 0 0; 2 1]
-    @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, true)) == [2 1; 2 1; 2 1]
+    @testset "non-periodic" begin
+        @test delaunay_compute_neighbors(data_points, vertices) == [0 0; 0 0; 2 1]
+    end
+    @testset "periodic" begin
+        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, false)) == [0 0; 2 1; 2 1]
+        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (false, true)) == [2 1; 0 0; 2 1]
+        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, true)) == [2 1; 2 1; 2 1]
+    end
 end
 
 @testset verbose=true showtiming=true "build_polygon_mesh" begin
@@ -40,7 +44,6 @@ end
 end
 
 @testset verbose=true showtiming=true "voronoi_compute_neighbors" begin
-    @testset "non-periodic" begin
         data_points = collect([0.0 0.0
                                1.0 0.0
                                1.0 1.0
@@ -50,27 +53,19 @@ end
         voronoi_vertices_coordinates, voronoi_vertices,
             voronoi_vertices_interval = build_polygon_mesh(data_points, vertices)
 
-        voronoi_neighbor = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
-                                                     voronoi_vertices, voronoi_vertices_interval,
-                                                     neighbors)
-        @test voronoi_neighbor == Cint[3, 4, 0, 0, 2, 0, 1, 0, 0, 3, 0, 1, 2, 0, 0, 4, 0, 3, 0, 0, 1, 0]
-    end
-    @testset "periodic - AssertionError" begin
-        @test_throws AssertionError begin
-            data_points = collect([0.0 0.0
-                                   1.0 0.0
-                                   1.0 1.0
-                                   0.0 1.0]')
-            vertices = Cint[3 1; 1 3; 2 4]
-            neighbors = Cint[0 0; 0 0; 2 1]
-            voronoi_vertices_coordinates, voronoi_vertices,
-                voronoi_vertices_interval = build_polygon_mesh(data_points, vertices)
-
+        @testset "non-periodic" begin
             voronoi_neighbor = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
                                                         voronoi_vertices, voronoi_vertices_interval,
-                                                        neighbors, periodicity = (true, true))
+                                                        neighbors)
+            @test voronoi_neighbor == [3, 4, 0, 0, 2, 0, 1, 0, 0, 3, 0, 1, 2, 0, 0, 4, 0, 3, 0, 0, 1, 0]
         end
-    end
+        @testset "periodic - no valid mesh" begin
+        @test_throws AssertionError begin
+                voronoi_neighbor = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
+                                                             voronoi_vertices, voronoi_vertices_interval,
+                                                             neighbors, periodicity = (true, true))
+            end
+        end
     @testset "periodic" begin
         data_points = mesh_basic([0.0, 0.0], [1.0, 1.0], 2, 3)
         vertices = Cint[5  1  3  4  3  6; 7  2  1  2  4  4; 4  4  4  5  6  7]
@@ -81,8 +76,8 @@ end
         voronoi_neighbor = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
                                                      voronoi_vertices, voronoi_vertices_interval,
                                                      neighbors, periodicity = (true, true))
-        @test voronoi_neighbor == Cint[4, 3, 2, 6, 2, 0, 4, 1, 7, 1, 5, 0, 4, 6, 5, 5, 1, 0, 6, 3, 1,
-                                       2, 5, 7, 4, 2, 3, 3, 7, 0, 4, 7, 1, 7, 3, 0, 4, 5, 6, 2, 6, 0]
+        @test voronoi_neighbor == [4, 3, 2, 6, 2, 0, 4, 1, 7, 1, 5, 0, 4, 6, 5, 5, 1, 0, 6, 3, 1,
+                                   2, 5, 7, 4, 2, 3, 3, 7, 0, 4, 7, 1, 7, 3, 0, 4, 5, 6, 2, 6, 0]
     end
 end
 
