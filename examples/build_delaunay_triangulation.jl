@@ -10,4 +10,4 @@ data_points = mesh_basic(coordinates_min, coordinates_max, n_points_x, n_points_
 # Create triangulation
 vertices = build_delaunay_triangulation(data_points; verbose = true)
 
-neighbors = delaunay_compute_neighbors(data_points, vertices)
+neighbors = delaunay_compute_neighbors(data_points, vertices, periodicity=(true, true))

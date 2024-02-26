@@ -7,7 +7,7 @@ using LinearAlgebra: normalize
 
 export build_delaunay_triangulation, delaunay_compute_neighbors
 export build_polygon_mesh, voronoi_compute_neighbors
-export mesh_basic
+export mesh_basic, mesh_bisected_rectangle
 
 const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
 
