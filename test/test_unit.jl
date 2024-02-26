@@ -15,19 +15,28 @@ using Smesh
 end
 
 @testset verbose=true showtiming=true "delaunay_compute_neighbors" begin
-    data_points = collect([0.0 0.0
-                           1.0 0.0
-                           1.0 1.0
-                           0.0 1.0]')
-    vertices = Cint[3 1; 1 3; 2 4]
+    data_points = mesh_basic([0.0, 0.0], [1.0, 1.0], 2, 3)
+    vertices = Cint[5  1  3  4  3  6; 7  2  1  2  4  4; 4  4  4  5  6  7]
 
     @testset "non-periodic" begin
-        @test delaunay_compute_neighbors(data_points, vertices) == [0 0; 0 0; 2 1]
+        neighbors = delaunay_compute_neighbors(data_points, vertices)
+        @test neighbors == [6  4  2  0  6  1;
+                            4  3  5  1  0  0;
+                            0  0  0  2  3  5]
     end
     @testset "periodic" begin
-        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, false)) == [0 0; 2 1; 2 1]
-        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (false, true)) == [2 1; 0 0; 2 1]
-        @test delaunay_compute_neighbors(data_points, vertices, periodicity = (true, true)) == [2 1; 2 1; 2 1]
+        neighbors = delaunay_compute_neighbors(data_points, vertices, periodicity = (true, false))
+        @test neighbors == [6  4  2  3  6  1;
+                            4  3  5  1  1  0;
+                            5  0  4  2  3  5]
+        neighbors = delaunay_compute_neighbors(data_points, vertices, periodicity = (false, true))
+        @test neighbors == [6  4  2  0  6  1;
+                            4  3  5  1  0  2;
+                            0  6  0  2  3  5]
+        neighbors = delaunay_compute_neighbors(data_points, vertices, periodicity = (true, true))
+        @test neighbors == [6  4  2  3  6  1;
+                            4  3  5  1  1  2;
+                            5  6  4  2  3  5]
     end
 end
 
@@ -55,8 +64,8 @@ end
 
         @testset "non-periodic" begin
             voronoi_neighbor = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
-                                                        voronoi_vertices, voronoi_vertices_interval,
-                                                        neighbors)
+                                                         voronoi_vertices, voronoi_vertices_interval,
+                                                         neighbors)
             @test voronoi_neighbor == [3, 4, 0, 0, 2, 0, 1, 0, 0, 3, 0, 1, 2, 0, 0, 4, 0, 3, 0, 0, 1, 0]
         end
         @testset "periodic - no valid mesh" begin

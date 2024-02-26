@@ -268,11 +268,10 @@ function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
                 face_index_end = voronoi_vertices_interval[2, element]
                 for face_index in face_index_start:face_index_end
                     if voronoi_neighbors[face_index] == 0 # Boundary face
+                        node1 = voronoi_vertices[face_index]
                         if face_index < face_index_end
-                            node1 = voronoi_vertices[face_index]
                             node2 = voronoi_vertices[face_index + 1]
                         else
-                            node1 = voronoi_vertices[face_index_end]
                             node2 = voronoi_vertices[face_index_start]
                         end
                         # Get face vector
