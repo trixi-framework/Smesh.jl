@@ -62,18 +62,55 @@ function mesh_bisected_rectangle(coordinates_min, coordinates_max, n_elements_x,
         end
     end
 
+    # Symmetric shift to get unique triangulation and therefore possible periodic boundaries in
+    # the polygon mesh
     if symmetric_shift
         domain_center = 0.5 * [coordinates_min[1] + coordinates_max[1],
                                coordinates_min[2] + coordinates_max[2]]
         s = [dx, dy]
         for i in axes(points, 2)
-            d = sqrt(sum((domain_center .- points[:,i]).^2))
-            u = max(sign(min(abs(coordinates_min[1] - points[1, i]),
-                             abs(coordinates_max[1] - points[1, i]),
-                             abs(coordinates_min[2] - points[2, i]),
-                             abs(coordinates_max[2] - points[2, i])) - 1.0e-8),
-                    0.0)
-            points[:, i] .= points[:, i] .+ 1.0e-6 * u * d * s .* (domain_center .- points[:, i])
+            # Do not move boundary points with boundary_distance <= 10^-6
+            boundary_distance = min(abs(coordinates_min[1] - points[1, i]),
+                                    abs(coordinates_max[1] - points[1, i]),
+                                    abs(coordinates_min[2] - points[2, i]),
+                                    abs(coordinates_max[2] - points[2, i]))
+            if boundary_distance > 1.0e-8 # inner point
+                d = sqrt(sum((domain_center .- points[:,i]).^2))
+                points[:, i] .+= 1.0e-6 * d * s .* (domain_center .- points[:, i])
+            end
+        end
+
+        if isodd(n_elements_x)
+            for i in axes(points, 2)
+                # Do not move boundary points with boundary_distance <= 10^-6
+                boundary_distance = min(abs(coordinates_min[1] - points[1, i]),
+                                        abs(coordinates_max[1] - points[1, i]),
+                                        abs(coordinates_min[2] - points[2, i]),
+                                        abs(coordinates_max[2] - points[2, i]))
+                if boundary_distance > 1.0e-8 # inner point
+                    # Only move the two most inner points columns
+                    distance_center_x = abs(domain_center[1] - points[1, i])
+                    if distance_center_x <= dx
+                        points[1, i] += 1.0e-6 * dx
+                    end
+                end
+            end
+        end
+        if isodd(n_elements_y)
+            for i in axes(points, 2)
+                # Do not move boundary points with boundary_distance <= 10^-6
+                boundary_distance = min(abs(coordinates_min[1] - points[1, i]),
+                                        abs(coordinates_max[1] - points[1, i]),
+                                        abs(coordinates_min[2] - points[2, i]),
+                                        abs(coordinates_max[2] - points[2, i]))
+                if boundary_distance > 1.0e-8 # inner point
+                    # Only move the two most inner points rows
+                    distance_center_y = abs(domain_center[2] - points[2, i])
+                    if distance_center_y <= dy
+                        points[2, i] += 1.0e-6 * dy
+                    end
+                end
+            end
         end
     end
 
