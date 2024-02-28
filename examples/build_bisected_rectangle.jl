@@ -3,9 +3,9 @@ using Smesh
 # Create data points
 coordinates_min = [0.0, 0.0]
 coordinates_max = [1.0, 1.0]
-n_points_x = 4
-n_points_y = 4
-data_points = mesh_bisected_rectangle(coordinates_min, coordinates_max, n_points_x, n_points_y,
+n_elements_x = 4
+n_elements_y = 4
+data_points = mesh_bisected_rectangle(coordinates_min, coordinates_max, n_elements_x, n_elements_y,
                                       symmetric_shift = true)
 
 # Create triangulation
