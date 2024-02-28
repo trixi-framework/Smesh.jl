@@ -3,8 +3,8 @@ using Smesh
 # Create data points
 coordinates_min = [0.0, 0.0]
 coordinates_max = [1.0, 1.0]
-n_elements_x = 4
-n_elements_y = 4
+n_elements_x = 5
+n_elements_y = 5
 data_points = mesh_bisected_rectangle(coordinates_min, coordinates_max, n_elements_x, n_elements_y,
                                       symmetric_shift = true)
 
@@ -19,4 +19,4 @@ voronoi_vertices_coordinates, voronoi_vertices,
 
 voronoi_neighbors = voronoi_compute_neighbors(vertices, voronoi_vertices_coordinates,
                                               voronoi_vertices, voronoi_vertices_interval,
-                                              neighbors, periodicity = (false, false))
+                                              neighbors, periodicity = (true, true))
