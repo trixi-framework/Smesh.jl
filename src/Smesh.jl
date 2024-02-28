@@ -7,7 +7,7 @@ using LinearAlgebra: normalize
 
 export build_delaunay_triangulation, delaunay_compute_neighbors
 export build_polygon_mesh, voronoi_compute_neighbors
-export mesh_basic
+export mesh_basic, mesh_bisected_rectangle
 
 const libsmesh = @load_preference("libsmesh", smesh_jll.libsmesh)
 
@@ -101,7 +101,7 @@ function delaunay_compute_periodic_neighbors!(neighbors, periodicity, data_point
                 end
             end
             # Check whether there are the same number of elements on both sides
-            @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries!"
+            @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries in $dim-th direction!"
             @assert length(boundary_elements_left) != 0 "No detected boundary edge in $dim-th direction!"
             # Get coordinates for sorting
             # Note: In vertices the points are ordered counterclockwise:
@@ -124,12 +124,12 @@ function delaunay_compute_periodic_neighbors!(neighbors, periodicity, data_point
             for i in 1:(length(boundary_elements_left) - 1)
                 face_length_left = abs(coord_elements_left[i] - coord_elements_left[i + 1])
                 face_length_right = abs(coord_elements_right[i] - coord_elements_right[i + 1])
-                @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces do not match!"
+                @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces in $dim-th direction do not match!"
             end
             # Check length of last boundary face
             face_length_left = abs(coord_elements_left[end] - data_points[dim % 2 + 1, vertices[boundary_faces_left[end] % 3 + 1, boundary_elements_left[end]]])
             face_length_right = abs(coord_elements_right[end] - data_points[dim % 2 + 1, vertices[(boundary_faces_right[end] + 1) % 3 + 1, boundary_elements_right[end]]])
-            @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces do not match!"
+            @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces in $dim-th direction do not match!"
 
             # Add neighboring elements to neighbor data structure
             for i in eachindex(boundary_elements_left)
@@ -293,7 +293,7 @@ function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
                 end
             end
             # Check whether there are the same number of elements on both sides
-            @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries!"
+            @assert length(boundary_elements_left) == length(boundary_elements_right) "Different number of elements at boundaries in $dim-th direction!"
             @assert length(boundary_elements_left) != 0 "No detected boundary edge in $dim-th direction!"
             # Get coordinates for sorting
             # Note: In voronoi_vertices the points are ordered counterclockwise:
@@ -318,12 +318,12 @@ function voronoi_compute_periodic_neighbors!(voronoi_neighbors, periodicity,
             for i in 1:(length(boundary_elements_left) - 1)
                 face_length_left = abs(coord_elements_left[i] - coord_elements_left[i + 1])
                 face_length_right = abs(coord_elements_right[i] - coord_elements_right[i + 1])
-                @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces do not match!"
+                @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces in $dim-th direction do not match!"
             end
             # Check length of last boundary face.
             face_length_left = abs(coord_elements_left[end] - voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_left[end]]])
             face_length_right = abs(coord_elements_right[end] - voronoi_vertices_coordinates[dim % 2 + 1, voronoi_vertices[boundary_faces_right[end] + 1]])
-            @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces do not match!"
+            @assert isapprox(face_length_left, face_length_right, atol=eps()) "Length of boundary faces in $dim-th direction do not match!"
 
             # Add neighboring elements to neighbor data structure
             for i in eachindex(boundary_elements_left)

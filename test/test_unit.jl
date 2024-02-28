@@ -5,6 +5,19 @@ using Smesh
 
 @testset verbose=true showtiming=true "test_unit.jl" begin
 
+@testset verbose=true showtiming=true "meshes" begin
+    coordinates_min = [0.0, 0.0]
+    coordinates_max = [1.0, 1.0]
+    @testset verbose=true showtiming=true "mesh_basic" begin
+        points = mesh_basic(coordinates_min, coordinates_max, 2, 2)
+        @test points == [0.0 1.0 0.0 0.5 1.0; 0.0 0.0 1.0 1.0 1.0]
+    end
+    @testset verbose=true showtiming=true "mesh_bisected_rectangle" begin
+        points = mesh_bisected_rectangle(coordinates_min, coordinates_max, 1, 1)
+        @test points == [0.0 1.0 0.0 1.0; 0.0 0.0 1.0 1.0]
+    end
+end
+
 @testset verbose=true showtiming=true "build_delaunay_triangulation" begin
     data_points = collect([0.0 0.0
                            1.0 0.0

@@ -13,6 +13,10 @@ end
     @test_nowarn include("../examples/build_polygon_mesh.jl")
 end
 
+@testset verbose=true showtiming=true "examples/build_bisected_rectangle.jl" begin
+    @test_nowarn include("../examples/build_bisected_rectangle.jl")
+end
+
 end # @testset "test_examples.jl"
 
 end # module
