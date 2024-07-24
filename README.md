@@ -2,7 +2,7 @@
 
 [![Docs-stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://trixi-framework.github.io/Smesh.jl/stable)
 [![Docs-dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://trixi-framework.github.io/Smesh.jl/dev)
-[![Build Status](https://github.com/trixi-framework/Smesh.jl/workflows/CI/badge.svg)](https://github.com/trixi-framework/Smesh.jl/actions?query=workflow%3ACI)
+[![Build Status](https://github.com/trixi-framework/Smesh.jl/actions/workflows/ci.yml/badge.svg)](https://github.com/trixi-framework/Smesh.jl/actions?query=workflow%3ACI)
 [![Coveralls](https://coveralls.io/repos/github/trixi-framework/Smesh.jl/badge.svg)](https://coveralls.io/github/trixi-framework/Smesh.jl)
 [![Codecov](https://codecov.io/gh/trixi-framework/Smesh.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/trixi-framework/Smesh.jl)
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/license/mit/)
